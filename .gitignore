@@ -1,0 +1,52 @@
+# === Python ===
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+
+# === Virtual Environments ===
+venv/
+.env/
+.venv/
+
+# === Jupyter Notebooks Checkpoints ===
+.ipynb_checkpoints/
+
+# === Editor/IDE ===
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+
+# === OS files ===
+.DS_Store
+Thumbs.db
+
+# === Logs and dumps ===
+*.log
+*.bak
+*.swp
+*.tmp
+
+# === Test and Coverage ===
+htmlcov/
+.coverage
+.tox/
+.nox/
+.cache/
+pytest_cache/
+coverage.xml
+*.cover
+
+# === Distribution / Build ===
+build/
+dist/
+*.egg-info/
+.eggs/
+*.manifest
+*.spec
+
+# === Git ===
+*.orig
+*.rej
