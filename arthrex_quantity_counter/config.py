@@ -11,6 +11,6 @@ WAREHOUSE_INFO = [
     ["bos_south", "BOSTON SOUTH INSTRUMENT WAREHOUSE"],
     ["cape", "CAPE INSTRUMENT WAREHOUSE"],
     ["emerson", "EMERSON WAREHOUSE"],
-    ["north_shore", "NORTH SHORE WAREHOUSE"],
+    ["north_shore", "NORTH SHORE INSTRUMENT WAREHOUSE"],
     ["faulkner", "FAULKNER WAREHOUSE"]
 ]

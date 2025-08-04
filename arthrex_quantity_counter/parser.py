@@ -28,10 +28,13 @@ def table_parser(target_pdf):
     try:
         table_list = []
         with pdfplumber.open(target_pdf) as pdf:
+
+            pdf_filename = (pdf.stream.name)
+
             for num in range(len(pdf.pages)):
                 page = pdf.pages[num]
                 table_list.append(page.extract_tables())
-            return table_list
+            return table_list, pdf_filename
 
     except Exception as e:
         print(f"Failed to read {target_pdf}: {e}")

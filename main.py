@@ -1,36 +1,39 @@
 from io import BytesIO
+import pandas as pd
 
 from arthrex_quantity_counter.parser import text_parser, table_parser
-from arthrex_quantity_counter.sorter import find_file_in_path, sort_file
+from arthrex_quantity_counter.sorter import find_file_in_path, sort_file, clean_list, combine_by_id
 from arthrex_quantity_counter.config import PDF_INPUT_DIR, PDF_OUTPUT_DIR
 
 def main():
 
     file_path = find_file_in_path(PDF_INPUT_DIR)
     target_pdf_list = []
+    pdf_filename = ""
 
     unclean_implant_list = []
     unclean_instrument_list = []
     implant_list = []
     instrument_list = []
+    pdf_filename_list = []
+
     for pdf in file_path:
         with open(pdf, 'rb') as f:
             pdf_bytes = f.read()
             target_pdf_list.append(BytesIO(pdf_bytes))
 
-        warehouse, text = text_parser(pdf)
-        print(warehouse)
-
         implant_identifier =  ['Implants', None, None, '', '', None, '', None, '']
         instrument_identifier = ['Instruments', None, None, '', '', None, '', None, '']
         cut_off_table_identifier = ['', 'Reference', 'Description', 'Qty', 'Target Qty']
 
-
-
         is_implant_table = False
         is_instrument_table = False
 
-        table_list = table_parser(pdf)
+        table_list, pdf_filename = table_parser(pdf)
+
+        # Get rid of file path and just keep the name of the pdf
+        pdf_filename = pdf_filename[pdf_filename.rfind('\\') + 1:]
+        pdf_filename_list.append(pdf_filename)
         
         for table in table_list:
             for list in table:
@@ -59,9 +62,26 @@ def main():
                         del list[0]
                         for item in list:
                             unclean_instrument_list.append(item)
-    print(unclean_implant_list)
+    
+    implant_list = clean_list(unclean_implant_list)
+    instrument_list = clean_list(unclean_instrument_list)
+
+    implant_list = combine_by_id(implant_list)
+    instrument_list = combine_by_id(instrument_list)
+
+    print(implant_list)
     print("\n")
-    print(unclean_instrument_list)
+    print(instrument_list)
+
+    df1 = pd.DataFrame(pdf_filename_list, columns=["Files used in this report"])
+    df2 = pd.DataFrame(implant_list, columns=["Implant ID", "Quantity"])
+    df3 = pd.DataFrame(instrument_list, columns=["Instrument ID", "Quantity"])
+
+    df = pd.concat([df1, df2, df3], axis=1)
+
+
+    df.to_csv('output.csv', index=False)
+
 
 
                     
